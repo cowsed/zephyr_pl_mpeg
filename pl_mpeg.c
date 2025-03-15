@@ -69,7 +69,9 @@ plm_buffer_t *plm_file_adapter_init(const char *fname,
   size_t len = fs_tell(&custom->file);
   fs_seek(&custom->file, 0, FS_SEEK_SET);
 
-  return plm_buffer_create_with_callbacks(
+  plm_buffer_t *buf = plm_buffer_create_with_callbacks(
       plm_file_adapter_load_callback, plm_file_adapter_seek_callback,
       plm_file_adapter_tell_callback, len, (void *)custom);
+  buf->discard_read_bytes = true;
+  return buf;
 }
